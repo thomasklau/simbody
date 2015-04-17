@@ -189,7 +189,6 @@ template class Array_<int>;
 template class Array_<std::string, unsigned char>;
 };
 
-#ifdef _MSC_VER // gcc 4.1.2 had trouble with this
 // Instantiate templatized methods
 typedef std::set<float>::const_iterator inputIt; // not a random access iterator
 
@@ -216,8 +215,6 @@ Array_<float,short>::insert(float*, const inputIt&, const inputIt&);
 // Comparison
 template bool SimTK::operator==(const ArrayViewConst_<float,int>&, 
                                 const ArrayViewConst_<float,unsigned>&);
-#endif
-
 
 void testConstruction() {
     const int data[] = {5,3,-2,27,9};

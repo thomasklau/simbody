@@ -694,7 +694,8 @@ static const int Outer = 500000
 
 static const int Inner = 1000;
 void testSpeedStdVector() {
-    std::vector<int> v; 
+    std::vector<int> v;
+    using Index = std::vector<int>::size_type;
     v.reserve(Inner);
 
     for (int i=0; i < Outer; ++i) {
@@ -706,7 +707,7 @@ void testSpeedStdVector() {
     int sum;
     for (int i=0; i < Outer; ++i) {
         sum = i;
-        for (unsigned i=0; i < v.size(); ++i)
+        for (Index i=0; i < v.size(); ++i)
             sum += v[i];
     }
     cout << "std::vector sum=" << sum << endl;
@@ -714,6 +715,7 @@ void testSpeedStdVector() {
 
 void testSpeedSimTKArray() {
     Array_<int> v; 
+    using Index = Array_<int>::size_type;
     v.reserve(Inner);
 
     for (int i=0; i < Outer; ++i) {
@@ -725,7 +727,7 @@ void testSpeedSimTKArray() {
     int sum;
     for (int i=0; i < Outer; ++i) {
         sum = i;
-        for (unsigned i=0; i < v.size(); ++i)
+        for (Index i=0; i < v.size(); ++i)
             sum += v[i];
     }
     cout << "Array sum=" << sum << endl;

@@ -9,7 +9,7 @@
  * Biological Structures at Stanford, funded under the NIH Roadmap for        *
  * Medical Research, grant U54 GM072970. See https://simtk.org/home/simbody.  *
  *                                                                            *
- * Portions copyright (c) 2010-13 Stanford University and the Authors.        *
+ * Portions copyright (c) 2010-15 Stanford University and the Authors.        *
  * Authors: Michael Sherman                                                   *
  * Contributors:                                                              *
  *                                                                            *
@@ -1396,13 +1396,10 @@ const char* indexName() const   {return this->CBase::indexName();}
 };
 
 
-
-
-
 //==============================================================================
 //                               CLASS Array_
 //==============================================================================
-/** The SimTK::Array_<T> container class is a plug-compatible replacement for 
+/** The Array_<T> container class is a plug-compatible replacement for 
 the C++ standard template library (STL) std::vector<T> class, but with some
 important advantages in performance, and functionality, and binary 
 compatibility.
@@ -1422,10 +1419,10 @@ containers should still do runtime range checks in Release builds for safety,
 but that makes them too slow for use in some high-performance contexts (and 
 also breaks the promise of generic programming but that's another rant). In 
 practice, VC++9 std::vector runs about half speed for simple operations like 
-indexing and push_back. Attempting to disable these runtime checks with 
-_SECURE_SCL breaks binary compatibility. In contrast the performance of this 
-Array_<T> class on any platform is indistinguishable from what you would get 
-by managing your own heap-allocated arrays.
+indexing and push_back. Attempting to disable these runtime checks 
+with `_SECURE_SCL` breaks binary compatibility. In contrast the performance of  
+this Array_<T> class on any platform is indistinguishable from what you would 
+get by managing your own heap-allocated arrays.
 
 @par
 Regarding memory footprint, the typical implementation of std::vector uses
@@ -2433,10 +2430,10 @@ elements erased. Capacity is unchanged. If the range is empty nothing happens.
     constructor and destructor once for each element that has to be moved. **/
 T* erase(T* first, const T* last1) {
     SimTK_ERRCHK(begin() <= first && first <= last1 && last1 <= end(),
-    "Array<T>::erase(first,last1)", "Pointers out of range or out of order.");
+    "Array_<T>::erase(first,last1)", "Pointers out of range or out of order.");
 
     const size_type nErased = size_type(last1-first);
-    SimTK_ERRCHK(isOwner() || nErased==0, "Array<T>::erase(first,last1)",
+    SimTK_ERRCHK(isOwner() || nErased==0, "Array_<T>::erase(first,last1)",
         "No elements can be erased from a non-owner array.");
 
     if (nErased) {
@@ -2468,8 +2465,8 @@ in constant time using the non-standard extension eraseFast().
 @see eraseFast() **/
 T* erase(T* p) {
     SimTK_ERRCHK(begin() <= p && p < end(),
-        "Array<T>::erase(p)", "Pointer must point to a valid element.");
-    SimTK_ERRCHK(isOwner(), "Array<T>::erase(p)",
+        "Array_<T>::erase(p)", "Pointer must point to a valid element.");
+    SimTK_ERRCHK(isOwner(), "Array_<T>::erase(p)",
         "No elements can be erased from a non-owner array.");
 
     destruct(p);              // Destruct the element we're erasing.
@@ -2501,8 +2498,8 @@ size is reduced by 1 but the capacity does not change.
 @see erase() **/
 T* eraseFast(T* p) {
     SimTK_ERRCHK(begin() <= p && p < end(),
-        "Array<T>::eraseFast(p)", "Pointer must point to a valid element.");
-    SimTK_ERRCHK(isOwner(), "Array<T>::eraseFast(p)",
+        "Array_<T>::eraseFast(p)", "Pointer must point to a valid element.");
+    SimTK_ERRCHK(isOwner(), "Array_<T>::eraseFast(p)",
         "No elements can be erased from a non-owner array.");
 
     destruct(p);
@@ -2554,7 +2551,7 @@ array, moving all following elements up by \a n positions.
     elements from the given value. 
 **/
 T* insert(T* p, size_type n, const T& value) {
-    T* const gap = insertGapAt(p, n, "Array<T>::insert(p,n,value)");
+    T* const gap = insertGapAt(p, n, "Array_<T>::insert(p,n,value)");
     // Copy construct into the inserted elements and note the size change.
     fillConstruct(gap, gap+n, value);
     setSize(size()+n);
@@ -2566,7 +2563,7 @@ it to a copy of a given value and moving all following elements up one
 position. This is identical to insert(\a p,1,\a value) but slightly faster; see
 that method for full documentation. **/
 T* insert(T* p, const T& value)  {
-    T* const gap = insertGapAt(p, 1, "Array<T>::insert(p,value)");
+    T* const gap = insertGapAt(p, 1, "Array_<T>::insert(p,value)");
     // Copy construct into the inserted element and note the size change.
     copyConstruct(gap, value);
     incrSize();

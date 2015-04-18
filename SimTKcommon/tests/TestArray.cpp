@@ -183,28 +183,37 @@ template <class T> Counter Count<T>::initAssign;
 template <class T> Counter Count<T>::copyAssign;
 template <class T> Counter Count<T>::dtor;
 
+typedef std::set<float>::const_iterator inputIt; // not a random access iterator
+
 // Instantiate the whole class to check for compilation problems.
 namespace SimTK {
 template class Array_<int>;
 template class Array_<std::string, unsigned char>;
-};
 
 // Instantiate templatized methods
-typedef std::set<float>::const_iterator inputIt; // not a random access iterator
 
 // Constructors.
-template Array_<float,int>::Array_(const Array_<float,int>&);
 template Array_<float,int>::Array_(const float*,const float*);
+
+// The extra <> is required here to keep gcc 4.8.2 from complaining that 
+// the instantiation is ambiguous, and clang 3.4 from dying with an internal 
+// error.
+template<> Array_<float,int>::Array_(const Array_<float,int>&);
 
 // Assignment.
 template void 
 Array_<float,int>::assign(const float*,const float*);
 template void
 Array_<double,int>::assign(const inputIt&, const inputIt&);
-template Array_<float,int>& 
-Array_<float,int>::operator=(const Array_<float,int>&);
 template Array_<double,int>& 
 Array_<double,int>::operator=(const std::vector<float>&);
+
+// The extra <> is required here to keep gcc 4.8.2 from complaining that 
+// the instantiation is ambiguous, and clang 3.4 from dying with an internal 
+// error.
+template<> Array_<float,int>& 
+Array_<float,int>::operator=(const Array_<float,int>&);
+
 
 // Insertion
 template float*
@@ -213,8 +222,9 @@ template float*
 Array_<float,short>::insert(float*, const inputIt&, const inputIt&);
 
 // Comparison
-template bool SimTK::operator==(const ArrayViewConst_<float,int>&, 
-                                const ArrayViewConst_<float,unsigned>&);
+template bool operator==(const ArrayViewConst_<float,int>&, 
+                         const ArrayViewConst_<float,unsigned>&);
+};
 
 void testConstruction() {
     const int data[] = {5,3,-2,27,9};

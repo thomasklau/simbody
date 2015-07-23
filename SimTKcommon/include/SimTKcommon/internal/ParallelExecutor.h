@@ -99,13 +99,13 @@ public:
      */
     static bool isWorkerThread();
 private:
-  /**
-   * Boolean flag if the threads have already been launched
-   */
+    /**
+    * Boolean flag if the threads have already been launched
+    */
     bool threadsLaunched = false;
-  /**
-   * Maximum number of threads the ParallelExecutor is allowed to use
-   */
+    /**
+    * Maximum number of threads the ParallelExecutor is allowed to use
+    */
     int numMaxThreads;
 };
 

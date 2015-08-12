@@ -24,6 +24,7 @@
 #include "ParallelExecutorImpl.h"
 #include "SimTKcommon/internal/ParallelExecutor.h"
 #include <pthread.h>
+#include <thread>
 
 #include <iostream>
 #include <string>
